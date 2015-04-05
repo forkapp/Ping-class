@@ -1,0 +1,35 @@
+<?php
+
+class NetworkTools {
+
+	public function ping(&$host, $port = 80, $timeout = 3, $id = null, $name = null) {
+
+		ini_set('display_errors', 'Off');
+		ini_set('html_errors', 'Off');
+		error_reporting( 0 );
+
+		ob_start();
+
+		if (!$host)
+			die('Error: no IP or IP is BAD');
+
+		$start		= microtime(true);
+
+		if (!$connect = @fsockopen($host, $port, &$errno, &$errstr, $timeout)) {
+			ob_end_clean();
+			$latency = null;
+		} else {
+			fclose($connect);
+			$latency = microtime(true) - $start;
+			$latency = 1;
+		}
+
+		return
+			array(
+				$id,
+				$latency
+			);
+
+	}
+
+}
